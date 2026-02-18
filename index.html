@@ -4,47 +4,260 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>AI Resume Builder</title>
-<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+
 <style>
+*{margin:0;padding:0;box-sizing:border-box;}
 body{
-  margin:0;
   font-family:'Poppins',sans-serif;
-  background:linear-gradient(135deg,#0f0c29,#302b63,#24243e);
+  background:linear-gradient(135deg,#0f2027,#203a43,#2c5364);
   color:white;
-  text-align:center;
+  scroll-behavior:smooth;
 }
+
+/* HERO */
 .hero{
-  padding:120px 20px;
+  height:100vh;
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  align-items:center;
+  text-align:center;
+  padding:20px;
+  animation:fadeIn 1.2s ease;
 }
+
 .hero h1{
   font-size:48px;
+  font-weight:700;
 }
+
 .hero p{
-  opacity:0.8;
+  margin-top:15px;
+  opacity:0.85;
+  max-width:500px;
 }
-button{
+
+.hero button{
   margin-top:30px;
-  padding:15px 35px;
+  padding:14px 35px;
   border:none;
   border-radius:30px;
   background:linear-gradient(90deg,#00f5ff,#8a2be2);
   color:white;
   font-weight:600;
   cursor:pointer;
+  transition:0.3s;
 }
-button:hover{
+
+.hero button:hover{
+  transform:scale(1.08);
+}
+
+/* FEATURES */
+.features{
+  padding:80px 20px;
+  text-align:center;
+}
+
+.features h2{
+  font-size:32px;
+  margin-bottom:40px;
+}
+
+.feature-grid{
+  display:flex;
+  justify-content:center;
+  gap:30px;
+  flex-wrap:wrap;
+}
+
+.feature{
+  background:rgba(255,255,255,0.08);
+  backdrop-filter:blur(10px);
+  padding:25px;
+  border-radius:20px;
+  width:250px;
+  transition:0.3s;
+}
+
+.feature:hover{
+  transform:translateY(-8px);
+}
+
+/* BUILDER */
+.builder{
+  padding:80px 20px;
+}
+
+.wrapper{
+  max-width:1200px;
+  margin:auto;
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:40px;
+}
+
+.form-box{
+  background:rgba(255,255,255,0.08);
+  backdrop-filter:blur(15px);
+  padding:30px;
+  border-radius:20px;
+}
+
+input,textarea{
+  width:100%;
+  padding:12px;
+  margin-bottom:15px;
+  border:none;
+  border-radius:10px;
+  font-family:'Poppins';
+}
+
+textarea{
+  height:100px;
+  resize:none;
+}
+
+.form-box button{
+  width:100%;
+  padding:14px;
+  border:none;
+  border-radius:30px;
+  background:linear-gradient(90deg,#00f5ff,#8a2be2);
+  color:white;
+  font-weight:600;
+  cursor:pointer;
+  transition:0.3s;
+}
+
+.form-box button:hover{
   transform:scale(1.05);
+}
+
+/* RESUME PREVIEW */
+.resume{
+  background:white;
+  color:black;
+  padding:40px;
+  border-radius:20px;
+}
+
+.resume h2{
+  font-size:28px;
+}
+
+.resume hr{
+  margin:10px 0;
+}
+
+.section-title{
+  margin-top:20px;
+  font-weight:600;
+}
+
+footer{
+  text-align:center;
+  padding:30px;
+  opacity:0.7;
+}
+
+@media(max-width:900px){
+  .wrapper{grid-template-columns:1fr;}
+  .hero h1{font-size:36px;}
+}
+
+@keyframes fadeIn{
+  from{opacity:0;transform:translateY(-20px);}
+  to{opacity:1;transform:translateY(0);}
 }
 </style>
 </head>
 
 <body>
-<div class="hero">
-  <h1>AI Resume Builder</h1>
-  <p>Create professional resume in minutes.</p>
-  <button onclick="window.location.href='templates.html'">
+
+<!-- HERO -->
+<section class="hero">
+  <h1>Create Professional Resume in Minutes</h1>
+  <p>Build stunning resumes with modern design and download instantly as PDF.</p>
+  <button onclick="document.getElementById('builder').scrollIntoView()">
     Build Now
   </button>
+</section>
+
+<!-- FEATURES -->
+<section class="features">
+  <h2>Why Choose Us</h2>
+  <div class="feature-grid">
+    <div class="feature">⚡ Fast & Easy Builder</div>
+    <div class="feature">🎨 Modern Design</div>
+    <div class="feature">📄 Instant PDF Download</div>
+  </div>
+</section>
+
+<!-- BUILDER -->
+<section class="builder" id="builder">
+<div class="wrapper">
+
+<div class="form-box">
+  <input id="name" placeholder="Full Name" oninput="updateResume()">
+  <input id="email" placeholder="Email" oninput="updateResume()">
+  <input id="phone" placeholder="Phone" oninput="updateResume()">
+  <textarea id="summary" placeholder="Professional Summary" oninput="updateResume()"></textarea>
+  <textarea id="skills" placeholder="Skills (comma separated)" oninput="updateResume()"></textarea>
+  <button onclick="downloadPDF()">Download Resume PDF</button>
 </div>
+
+<div class="resume" id="resume">
+  <h2 id="r-name">Your Name</h2>
+  <p id="r-email"></p>
+  <p id="r-phone"></p>
+  <hr>
+  <div>
+    <div class="section-title">Professional Summary</div>
+    <p id="r-summary"></p>
+  </div>
+  <div>
+    <div class="section-title">Skills</div>
+    <p id="r-skills"></p>
+  </div>
+</div>
+
+</div>
+</section>
+
+<footer>
+  © 2026 AI Resume Builder | Built by You 🚀
+</footer>
+
+<script>
+function updateResume(){
+  document.getElementById("r-name").innerText =
+    document.getElementById("name").value || "Your Name";
+  document.getElementById("r-email").innerText =
+    document.getElementById("email").value;
+  document.getElementById("r-phone").innerText =
+    document.getElementById("phone").value;
+  document.getElementById("r-summary").innerText =
+    document.getElementById("summary").value;
+  document.getElementById("r-skills").innerText =
+    document.getElementById("skills").value;
+}
+
+function downloadPDF(){
+  const element = document.getElementById("resume");
+  const opt = {
+    margin:0.5,
+    filename:'Resume.pdf',
+    image:{ type:'jpeg', quality:0.98 },
+    html2canvas:{ scale:2 },
+    jsPDF:{ unit:'in', format:'a4', orientation:'portrait' }
+  };
+  html2pdf().set(opt).from(element).save();
+}
+</script>
+
 </body>
 </html>
