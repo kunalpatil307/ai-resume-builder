@@ -4,65 +4,153 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Resume Builder</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
-<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+
 <style>
-body{
+*{
   margin:0;
+  padding:0;
+  box-sizing:border-box;
+}
+
+body{
   font-family:'Poppins',sans-serif;
-  background:#0f0c29;
+  background:linear-gradient(135deg,#0f2027,#203a43,#2c5364);
+  min-height:100vh;
+  padding:40px 20px;
   color:white;
 }
+
 .container{
-  padding:40px 20px;
-  max-width:1100px;
+  max-width:1200px;
   margin:auto;
 }
-.form-container{
+
+.title{
+  text-align:center;
+  font-size:36px;
+  font-weight:700;
+  margin-bottom:40px;
+  animation:fadeIn 1s ease;
+}
+
+.wrapper{
   display:grid;
   grid-template-columns:1fr 1fr;
-  gap:30px;
+  gap:40px;
 }
+
+.form-box{
+  background:rgba(255,255,255,0.08);
+  backdrop-filter:blur(15px);
+  padding:30px;
+  border-radius:20px;
+  box-shadow:0 20px 40px rgba(0,0,0,0.3);
+}
+
 input,textarea{
   width:100%;
-  padding:10px;
-  margin-bottom:15px;
-}
-button{
   padding:12px;
+  margin-bottom:15px;
   border:none;
-  background:#00f5ff;
-  cursor:pointer;
+  border-radius:10px;
+  outline:none;
+  font-family:'Poppins';
 }
-.resume{
+
+textarea{
+  height:100px;
+  resize:none;
+}
+
+button{
+  width:100%;
+  padding:14px;
+  border:none;
+  border-radius:30px;
+  background:linear-gradient(90deg,#00f5ff,#8a2be2);
+  color:white;
+  font-weight:600;
+  cursor:pointer;
+  transition:0.3s;
+}
+
+button:hover{
+  transform:scale(1.05);
+}
+
+.resume-box{
   background:white;
   color:black;
-  padding:20px;
+  padding:40px;
+  border-radius:20px;
+  box-shadow:0 20px 40px rgba(0,0,0,0.3);
 }
-@media(max-width:768px){
-  .form-container{grid-template-columns:1fr;}
+
+.resume-box h2{
+  font-size:28px;
+}
+
+.resume-box hr{
+  margin:10px 0;
+}
+
+.section-title{
+  margin-top:20px;
+  font-weight:600;
+  font-size:18px;
+  color:#333;
+}
+
+@media(max-width:900px){
+  .wrapper{
+    grid-template-columns:1fr;
+  }
+}
+
+@keyframes fadeIn{
+  from{opacity:0;transform:translateY(-20px);}
+  to{opacity:1;transform:translateY(0);}
 }
 </style>
 </head>
 
 <body>
+
 <div class="container">
-<h1>Build Your Resume</h1>
 
-<div class="form-container">
+<div class="title">Build Your Resume</div>
 
-<form oninput="updateResume()">
-<input id="name" placeholder="Full Name">
-<input id="email" placeholder="Email">
-<textarea id="summary" placeholder="Summary"></textarea>
-<button type="button" onclick="downloadPDF()">Download PDF</button>
-</form>
+<div class="wrapper">
 
-<div class="resume" id="resume">
-<h2 id="r-name">Your Name</h2>
-<p id="r-email"></p>
-<hr>
-<p id="r-summary"></p>
+<div class="form-box">
+  <input id="name" placeholder="Full Name" oninput="updateResume()">
+  <input id="email" placeholder="Email" oninput="updateResume()">
+  <input id="phone" placeholder="Phone Number" oninput="updateResume()">
+  <textarea id="summary" placeholder="Professional Summary" oninput="updateResume()"></textarea>
+  <textarea id="skills" placeholder="Skills (comma separated)" oninput="updateResume()"></textarea>
+  <button onclick="downloadPDF()">Download Resume PDF</button>
+</div>
+
+<div class="resume-box" id="resume">
+
+  <h2 id="r-name">Your Name</h2>
+  <p id="r-email"></p>
+  <p id="r-phone"></p>
+  <hr>
+
+  <div>
+    <div class="section-title">Professional Summary</div>
+    <p id="r-summary"></p>
+  </div>
+
+  <div>
+    <div class="section-title">Skills</div>
+    <p id="r-skills"></p>
+  </div>
+
 </div>
 
 </div>
@@ -71,20 +159,33 @@ button{
 <script>
 function updateResume(){
   document.getElementById("r-name").innerText =
-    document.getElementById("name").value;
+    document.getElementById("name").value || "Your Name";
+
   document.getElementById("r-email").innerText =
     document.getElementById("email").value;
+
+  document.getElementById("r-phone").innerText =
+    document.getElementById("phone").value;
+
   document.getElementById("r-summary").innerText =
     document.getElementById("summary").value;
 
-  let template = localStorage.getItem("template");
-  if(template === "classic"){
-    document.getElementById("resume").style.fontFamily = "serif";
-  }
+  document.getElementById("r-skills").innerText =
+    document.getElementById("skills").value;
 }
 
 function downloadPDF(){
-  html2pdf().from(document.getElementById("resume")).save("resume.pdf");
+  const element = document.getElementById("resume");
+
+  const opt = {
+    margin:0.5,
+    filename:'Resume.pdf',
+    image:{ type:'jpeg', quality:0.98 },
+    html2canvas:{ scale:2 },
+    jsPDF:{ unit:'in', format:'a4', orientation:'portrait' }
+  };
+
+  html2pdf().set(opt).from(element).save();
 }
 </script>
 
