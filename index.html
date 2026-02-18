@@ -2,155 +2,246 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>AI Resume Builder</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI Resume Builder</title>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
-
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
 <style>
-* { box-sizing: border-box; font-family: Arial; }
-body { margin:0; background:#f4f6f9; }
-
-header {
-  background:#111827;
-  color:white;
-  padding:20px;
-  text-align:center;
-  font-size:24px;
-  font-weight:bold;
+*{
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
+  font-family:'Poppins',sans-serif;
 }
-
-.container {
+body{
+  background:#f5f7fb;
+  color:#111827;
+}
+header{
+  padding:20px 40px;
   display:flex;
-  flex-wrap:wrap;
-  padding:20px;
+  justify-content:space-between;
+  align-items:center;
+  background:white;
+  box-shadow:0 2px 10px rgba(0,0,0,0.05);
+}
+.logo{
+  font-weight:700;
+  font-size:22px;
+}
+nav a{
+  margin-left:20px;
+  text-decoration:none;
+  color:#111827;
+  font-weight:500;
+}
+.hero{
+  text-align:center;
+  padding:80px 20px;
+  background:linear-gradient(90deg,#667eea,#764ba2);
+  color:white;
+}
+.hero h1{
+  font-size:42px;
+  font-weight:700;
+}
+.hero p{
+  margin-top:15px;
+  font-size:18px;
+}
+.hero button{
+  margin-top:25px;
+  padding:12px 25px;
+  border:none;
+  border-radius:8px;
+  font-weight:600;
+  cursor:pointer;
+  background:white;
+  color:#111827;
+}
+section{
+  padding:60px 20px;
+  max-width:1100px;
+  margin:auto;
+}
+.section-title{
+  text-align:center;
+  font-size:28px;
+  margin-bottom:40px;
+  font-weight:600;
+}
+.features{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
   gap:20px;
 }
-
-.form-section, .preview-section {
-  flex:1;
-  min-width:300px;
+.feature-card{
   background:white;
-  padding:20px;
-  border-radius:10px;
-  box-shadow:0 4px 12px rgba(0,0,0,0.1);
+  padding:25px;
+  border-radius:12px;
+  box-shadow:0 5px 15px rgba(0,0,0,0.05);
+  text-align:center;
 }
-
-input, textarea, select {
+.feature-card h3{
+  margin-bottom:10px;
+}
+.form-container{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:30px;
+}
+form input, form textarea{
   width:100%;
   padding:10px;
-  margin-bottom:12px;
+  margin-bottom:15px;
   border-radius:6px;
-  border:1px solid #ccc;
+  border:1px solid #ddd;
 }
-
-button {
-  width:100%;
-  padding:12px;
+form button{
+  background:#667eea;
+  color:white;
   border:none;
+  padding:10px;
   border-radius:6px;
-  font-size:16px;
   cursor:pointer;
-  margin-top:5px;
+  font-weight:600;
 }
-
-.generate-btn { background:#2563eb; color:white; }
-.download-btn { background:#16a34a; color:white; }
-
-.resume-modern h1 { color:#2563eb; }
-.resume-corporate { border-left:5px solid #111827; padding-left:15px; }
-.resume-minimal { font-family: Georgia; }
-
-footer {
-  text-align:center;
-  padding:15px;
-  font-size:14px;
+.resume-preview{
+  background:white;
+  padding:20px;
+  border-radius:8px;
+  box-shadow:0 5px 15px rgba(0,0,0,0.05);
+}
+.resume-preview h2{
+  margin-bottom:10px;
+}
+.download-btn{
+  margin-top:20px;
   background:#111827;
   color:white;
-  margin-top:20px;
+  padding:10px;
+  border:none;
+  border-radius:6px;
+  cursor:pointer;
+}
+footer{
+  background:#111827;
+  color:white;
+  text-align:center;
+  padding:20px;
+  margin-top:40px;
+}
+@media(max-width:768px){
+  .form-container{
+    grid-template-columns:1fr;
+  }
 }
 </style>
 </head>
 
 <body>
 
-<header>AI Resume Builder 🚀</header>
+<header>
+  <div class="logo">AI Resume Builder</div>
+  <nav>
+    <a href="#features">Features</a>
+    <a href="#how">How It Works</a>
+    <a href="#builder">Builder</a>
+  </nav>
+</header>
 
-<div class="container">
-
-<div class="form-section">
-<h2>Enter Details</h2>
-
-<select id="template">
-<option value="modern">Modern</option>
-<option value="corporate">Corporate</option>
-<option value="minimal">Minimal</option>
-</select>
-
-<input type="text" id="name" placeholder="Full Name">
-<input type="text" id="email" placeholder="Email">
-<input type="text" id="phone" placeholder="Phone">
-<textarea id="summary" placeholder="Professional Summary"></textarea>
-<textarea id="skills" placeholder="Skills (comma separated)"></textarea>
-<textarea id="experience" placeholder="Work Experience"></textarea>
-<textarea id="education" placeholder="Education"></textarea>
-
-<button class="generate-btn" onclick="generateResume()">Generate Resume</button>
-<button class="download-btn" onclick="downloadPDF()">Download PDF</button>
+<div class="hero">
+  <h1>Create Professional Resume in Minutes</h1>
+  <p>Simple. Fast. Free. AI Powered Resume Generator.</p>
+  <button onclick="document.getElementById('builder').scrollIntoView({behavior:'smooth'})">
+    Get Started
+  </button>
 </div>
 
-<div class="preview-section">
-<h2>Resume Preview</h2>
-<div id="resumePreview"></div>
-</div>
+<section id="features">
+  <div class="section-title">Features</div>
+  <div class="features">
+    <div class="feature-card">
+      <h3>Modern Templates</h3>
+      <p>Professional clean resume layout.</p>
+    </div>
+    <div class="feature-card">
+      <h3>Instant Preview</h3>
+      <p>See resume changes live.</p>
+    </div>
+    <div class="feature-card">
+      <h3>Download PDF</h3>
+      <p>Export ready-to-send PDF instantly.</p>
+    </div>
+  </div>
+</section>
 
-</div>
+<section id="how">
+  <div class="section-title">How It Works</div>
+  <div class="features">
+    <div class="feature-card">
+      <h3>1. Enter Details</h3>
+      <p>Fill in your personal information.</p>
+    </div>
+    <div class="feature-card">
+      <h3>2. Preview Resume</h3>
+      <p>Check live resume preview.</p>
+    </div>
+    <div class="feature-card">
+      <h3>3. Download PDF</h3>
+      <p>Download your professional resume.</p>
+    </div>
+  </div>
+</section>
 
-<footer>Built by Kunal Patil | 2026</footer>
+<section id="builder">
+  <div class="section-title">Resume Builder</div>
+  <div class="form-container">
+    
+    <form oninput="updateResume()">
+      <input type="text" id="name" placeholder="Full Name">
+      <input type="text" id="email" placeholder="Email">
+      <input type="text" id="phone" placeholder="Phone">
+      <textarea id="summary" placeholder="Professional Summary"></textarea>
+      <textarea id="education" placeholder="Education"></textarea>
+      <textarea id="skills" placeholder="Skills"></textarea>
+      <button type="button" onclick="downloadPDF()">Download PDF</button>
+    </form>
+
+    <div class="resume-preview" id="resume">
+      <h2 id="r-name">Your Name</h2>
+      <p id="r-email"></p>
+      <p id="r-phone"></p>
+      <hr>
+      <h3>Summary</h3>
+      <p id="r-summary"></p>
+      <h3>Education</h3>
+      <p id="r-education"></p>
+      <h3>Skills</h3>
+      <p id="r-skills"></p>
+    </div>
+
+  </div>
+</section>
+
+<footer>
+  © 2026 AI Resume Builder | Built with ❤️
+</footer>
 
 <script>
-
-function generateResume() {
-const template = document.getElementById("template").value;
-const name = document.getElementById("name").value;
-const email = document.getElementById("email").value;
-const phone = document.getElementById("phone").value;
-const summary = document.getElementById("summary").value;
-const skills = document.getElementById("skills").value;
-const experience = document.getElementById("experience").value;
-const education = document.getElementById("education").value;
-
-let resumeClass = "";
-
-if(template === "modern") resumeClass = "resume-modern";
-if(template === "corporate") resumeClass = "resume-corporate";
-if(template === "minimal") resumeClass = "resume-minimal";
-
-document.getElementById("resumePreview").innerHTML = `
-<div class="${resumeClass}">
-<h1>${name}</h1>
-<p><strong>Email:</strong> ${email}</p>
-<p><strong>Phone:</strong> ${phone}</p>
-
-<h3>Summary</h3>
-<p>${summary}</p>
-
-<h3>Skills</h3>
-<p>${skills}</p>
-
-<h3>Experience</h3>
-<p>${experience}</p>
-
-<h3>Education</h3>
-<p>${education}</p>
-</div>
-`;
+function updateResume(){
+  document.getElementById('r-name').innerText = document.getElementById('name').value;
+  document.getElementById('r-email').innerText = document.getElementById('email').value;
+  document.getElementById('r-phone').innerText = document.getElementById('phone').value;
+  document.getElementById('r-summary').innerText = document.getElementById('summary').value;
+  document.getElementById('r-education').innerText = document.getElementById('education').value;
+  document.getElementById('r-skills').innerText = document.getElementById('skills').value;
 }
 
-function downloadPDF() {
-const element = document.getElementById("resumePreview");
-html2pdf().from(element).save("resume.pdf");
+function downloadPDF(){
+  var element = document.getElementById('resume');
+  html2pdf().from(element).save('resume.pdf');
 }
-
 </script>
 
 </body>
