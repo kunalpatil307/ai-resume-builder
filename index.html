@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>AI Resume Builder</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            margin: 0;
+            padding: 20px;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+        }
+
+        .container {
+            max-width: 800px;
+            margin: auto;
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        h2 {
+            margin-top: 25px;
+            border-bottom: 2px solid #eee;
+            padding-bottom: 5px;
+        }
+
+        label {
+            display: block;
+            margin-top: 10px;
+            font-weight: 600;
+        }
+
+        input, textarea {
+            width: 100%;
+            padding: 10px;
+            margin-top: 5px;
+            border-radius: 6px;
+            border: 1px solid #ccc;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        button {
+            margin-top: 20px;
+            background: #667eea;
+            color: white;
+            padding: 12px 20px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 600;
+            width: 100%;
+        }
+
+        button:hover {
+            background: #5a67d8;
+        }
+
+        #resume-preview {
+            margin-top: 30px;
+            padding: 20px;
+            border-radius: 8px;
+            background: #f9f9f9;
+            border: 1px solid #ddd;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        .download-btn {
+            background: #28a745;
+            margin-top: 15px;
+        }
+
+        .download-btn:hover {
+            background: #218838;
+        }
+
+        @media print {
+            body {
+                background: white;
+            }
+            button {
+                display: none;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="container">
+    <h1>AI Resume Builder</h1>
+
+    <form id="resume-form">
+
+        <h2>Personal Information</h2>
+
+        <label>Full Name</label>
+        <input type="text" id="name" required>
+
+        <label>Email</label>
+        <input type="email" id="email" required>
+
+        <label>Phone</label>
+        <input type="tel" id="phone">
+
+        <label>Address</label>
+        <input type="text" id="address">
+
+        <h2>Education</h2>
+        <textarea id="education" rows="3"></textarea>
+
+        <h2>Work Experience</h2>
+        <textarea id="experience" rows="3"></textarea>
+
+        <h2>Skills</h2>
+        <textarea id="skills" rows="2"></textarea>
+
+        <button type="button" id="generate-btn">Generate Resume</button>
+
+    </form>
+
+    <div id="resume-preview" class="hidden">
+        <h2>Resume Preview</h2>
+        <div id="preview-content"></div>
+        <button class="download-btn" onclick="window.print()">Download as PDF</button>
+    </div>
+
+</div>
+
+<script>
+
+document.getElementById('generate-btn').addEventListener('click', function() {
+
+    const name = document.getElementById('name').value.trim();
+    const email = document.getElementById('email').value.trim();
+    const phone = document.getElementById('phone').value.trim();
+    const address = document.getElementById('address').value.trim();
+    const education = document.getElementById('education').value.trim();
+    const experience = document.getElementById('experience').value.trim();
+    const skills = document.getElementById('skills').value.trim();
+
+    if (!name || !email) {
+        alert("Please enter at least Name and Email.");
+        return;
+    }
+
+    const preview = document.getElementById('preview-content');
+
+    preview.innerHTML = `
+        <h2>${name}</h2>
+        <p><strong>Email:</strong> ${email}</p>
+        <p><strong>Phone:</strong> ${phone}</p>
+        <p><strong>Address:</strong> ${address}</p>
+
+        <h3>Education</h3>
+        <p>${education.replace(/\n/g, '<br>')}</p>
+
+        <h3>Work Experience</h3>
+        <p>${experience.replace(/\n/g, '<br>')}</p>
+
+        <h3>Skills</h3>
+        <p>${skills.replace(/\n/g, '<br>')}</p>
+    `;
+
+    document.getElementById('resume-preview').classList.remove('hidden');
+});
+
+</script>
+
+</body>
+</html>
