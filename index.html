@@ -1,184 +1,171 @@
-<!DOCTYPE html>
+  <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <title>AI Resume Builder</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8">
+  <title>AI Resume Builder</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+  <style>
+    * {
+      box-sizing: border-box;
+      font-family: Arial, sans-serif;
+    }
 
-    <style>
-        body {
-            font-family: 'Poppins', sans-serif;
-            margin: 0;
-            padding: 20px;
-            background: linear-gradient(135deg, #667eea, #764ba2);
-        }
+    body {
+      margin: 0;
+      background: #f4f6f9;
+    }
 
-        .container {
-            max-width: 800px;
-            margin: auto;
-            background: white;
-            padding: 30px;
-            border-radius: 12px;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
-        }
+    header {
+      background: #111827;
+      color: white;
+      padding: 20px;
+      text-align: center;
+      font-size: 24px;
+      font-weight: bold;
+    }
 
-        h1 {
-            text-align: center;
-            margin-bottom: 20px;
-        }
+    .container {
+      display: flex;
+      flex-wrap: wrap;
+      padding: 20px;
+      gap: 20px;
+    }
 
-        h2 {
-            margin-top: 25px;
-            border-bottom: 2px solid #eee;
-            padding-bottom: 5px;
-        }
+    .form-section, .preview-section {
+      flex: 1;
+      min-width: 300px;
+      background: white;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    }
 
-        label {
-            display: block;
-            margin-top: 10px;
-            font-weight: 600;
-        }
+    h2 {
+      margin-top: 0;
+    }
 
-        input, textarea {
-            width: 100%;
-            padding: 10px;
-            margin-top: 5px;
-            border-radius: 6px;
-            border: 1px solid #ccc;
-            font-family: 'Poppins', sans-serif;
-        }
+    input, textarea {
+      width: 100%;
+      padding: 10px;
+      margin-bottom: 12px;
+      border-radius: 6px;
+      border: 1px solid #ccc;
+    }
 
-        button {
-            margin-top: 20px;
-            background: #667eea;
-            color: white;
-            padding: 12px 20px;
-            border: none;
-            border-radius: 6px;
-            cursor: pointer;
-            font-weight: 600;
-            width: 100%;
-        }
+    button {
+      width: 100%;
+      padding: 12px;
+      border: none;
+      border-radius: 6px;
+      font-size: 16px;
+      cursor: pointer;
+      margin-top: 5px;
+    }
 
-        button:hover {
-            background: #5a67d8;
-        }
+    .generate-btn {
+      background: #2563eb;
+      color: white;
+    }
 
-        #resume-preview {
-            margin-top: 30px;
-            padding: 20px;
-            border-radius: 8px;
-            background: #f9f9f9;
-            border: 1px solid #ddd;
-        }
+    .download-btn {
+      background: #16a34a;
+      color: white;
+    }
 
-        .hidden {
-            display: none;
-        }
+    .resume {
+      padding: 20px;
+    }
 
-        .download-btn {
-            background: #28a745;
-            margin-top: 15px;
-        }
+    .resume h1 {
+      margin-bottom: 5px;
+    }
 
-        .download-btn:hover {
-            background: #218838;
-        }
+    .resume p {
+      margin: 4px 0;
+    }
 
-        @media print {
-            body {
-                background: white;
-            }
-            button {
-                display: none;
-            }
-        }
-    </style>
+    footer {
+      text-align: center;
+      padding: 15px;
+      font-size: 14px;
+      background: #111827;
+      color: white;
+      margin-top: 20px;
+    }
+
+  </style>
 </head>
-
 <body>
 
+<header>
+  AI Resume Builder 🚀
+</header>
+
 <div class="container">
-    <h1>AI Resume Builder</h1>
+  
+  <div class="form-section">
+    <h2>Enter Your Details</h2>
+    <input type="text" id="name" placeholder="Full Name">
+    <input type="text" id="email" placeholder="Email">
+    <input type="text" id="phone" placeholder="Phone">
+    <textarea id="summary" placeholder="Professional Summary"></textarea>
+    <textarea id="skills" placeholder="Skills (comma separated)"></textarea>
+    <textarea id="experience" placeholder="Work Experience"></textarea>
+    <textarea id="education" placeholder="Education"></textarea>
 
-    <form id="resume-form">
+    <button class="generate-btn" onclick="generateResume()">Generate Resume</button>
+    <button class="download-btn" onclick="downloadPDF()">Download PDF</button>
+  </div>
 
-        <h2>Personal Information</h2>
-
-        <label>Full Name</label>
-        <input type="text" id="name" required>
-
-        <label>Email</label>
-        <input type="email" id="email" required>
-
-        <label>Phone</label>
-        <input type="tel" id="phone">
-
-        <label>Address</label>
-        <input type="text" id="address">
-
-        <h2>Education</h2>
-        <textarea id="education" rows="3"></textarea>
-
-        <h2>Work Experience</h2>
-        <textarea id="experience" rows="3"></textarea>
-
-        <h2>Skills</h2>
-        <textarea id="skills" rows="2"></textarea>
-
-        <button type="button" id="generate-btn">Generate Resume</button>
-
-    </form>
-
-    <div id="resume-preview" class="hidden">
-        <h2>Resume Preview</h2>
-        <div id="preview-content"></div>
-        <button class="download-btn" onclick="window.print()">Download as PDF</button>
-    </div>
+  <div class="preview-section">
+    <h2>Resume Preview</h2>
+    <div id="resumePreview" class="resume"></div>
+  </div>
 
 </div>
 
+<footer>
+  Built by Kunal Patil | 2026
+</footer>
+
 <script>
 
-document.getElementById('generate-btn').addEventListener('click', function() {
+function generateResume() {
+  const name = document.getElementById("name").value;
+  const email = document.getElementById("email").value;
+  const phone = document.getElementById("phone").value;
+  const summary = document.getElementById("summary").value;
+  const skills = document.getElementById("skills").value;
+  const experience = document.getElementById("experience").value;
+  const education = document.getElementById("education").value;
 
-    const name = document.getElementById('name').value.trim();
-    const email = document.getElementById('email').value.trim();
-    const phone = document.getElementById('phone').value.trim();
-    const address = document.getElementById('address').value.trim();
-    const education = document.getElementById('education').value.trim();
-    const experience = document.getElementById('experience').value.trim();
-    const skills = document.getElementById('skills').value.trim();
+  document.getElementById("resumePreview").innerHTML = `
+    <h1>${name}</h1>
+    <p><strong>Email:</strong> ${email}</p>
+    <p><strong>Phone:</strong> ${phone}</p>
 
-    if (!name || !email) {
-        alert("Please enter at least Name and Email.");
-        return;
-    }
+    <h3>Professional Summary</h3>
+    <p>${summary}</p>
 
-    const preview = document.getElementById('preview-content');
+    <h3>Skills</h3>
+    <p>${skills}</p>
 
-    preview.innerHTML = `
-        <h2>${name}</h2>
-        <p><strong>Email:</strong> ${email}</p>
-        <p><strong>Phone:</strong> ${phone}</p>
-        <p><strong>Address:</strong> ${address}</p>
+    <h3>Experience</h3>
+    <p>${experience}</p>
 
-        <h3>Education</h3>
-        <p>${education.replace(/\n/g, '<br>')}</p>
+    <h3>Education</h3>
+    <p>${education}</p>
+  `;
+}
 
-        <h3>Work Experience</h3>
-        <p>${experience.replace(/\n/g, '<br>')}</p>
-
-        <h3>Skills</h3>
-        <p>${skills.replace(/\n/g, '<br>')}</p>
-    `;
-
-    document.getElementById('resume-preview').classList.remove('hidden');
-});
+function downloadPDF() {
+  const element = document.getElementById("resumePreview");
+  html2pdf().from(element).save("resume.pdf");
+}
 
 </script>
 
 </body>
-</html>
+</html>                  
